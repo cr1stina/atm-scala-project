@@ -1,3 +1,4 @@
+import java.sql.{Connection, DriverManager}
 import java.util.Scanner
 
 object ATM {
@@ -205,8 +206,20 @@ object ATM {
       val user : User = bank.newUser("Cristina", "Cazares", "1234")
       val acc : Account = new Account("Checking", user, bank)
       bank.addAccount(acc)
-
       var currentUser : User = null
+      //Database connection
+      val url = "jdbc:mysql://localhost/atm"
+      val username = "root"
+      val password = "root"
+      var connection : Connection = null
+      try{
+        connection = DriverManager.getConnection(url, username, password)
+        println("DATABASE SUCCESSFULLY CONNECTED")
+      }catch{
+        case e: Exception => e.printStackTrace()
+      }
+
+      //main loop
       while(true){
         currentUser = ATM.mainMenuPrompt(bank, sc)
         ATM.printUserMenu(currentUser, sc)
