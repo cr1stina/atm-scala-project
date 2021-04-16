@@ -3,6 +3,7 @@ import java.util.Date
 
 class DatabaseManager(var url : String, var username : String, var password : String) {
   private var connection : Connection = _
+  //Make the connection to the database.
   try{
     connection = DriverManager.getConnection(url, username, password)
     println("DATABASE SUCCESSFULLY CONNECTED")
@@ -10,8 +11,15 @@ class DatabaseManager(var url : String, var username : String, var password : St
     case e: Exception => e.printStackTrace()
   }
 
+  //Prepare the statement for the database queries.
   private val statement = connection.createStatement()
 
+  /**
+   * login: Validates the user's access data.
+   * @param id  User identification number.
+   * @param pin Account password
+   * @return True if both data are correct, otherwise false.
+   */
   def login(id : String, pin : String) : Boolean = {
     val rs = statement.executeQuery(s"SELECT nameUser, lastName FROM user WHERE iduser = $id AND pin = $pin")
     if(rs.next())
@@ -20,6 +28,11 @@ class DatabaseManager(var url : String, var username : String, var password : St
       false
   }
 
+  /**
+   * getBankName: Check the name of the current bank.
+   * @param id    Bank id to consult.
+   * @return      Name of the bank.
+   */
   def getBankName(id : Int) : String = {
     val rs = statement.executeQuery(s"SELECT nameB FROM bank WHERE idBank = $id")
     if(rs.next())
@@ -28,6 +41,11 @@ class DatabaseManager(var url : String, var username : String, var password : St
       null
   }
 
+  /**
+   * getUserName: Check the name of the current user.
+   * @param id    User id to consult.
+   * @return      Name of the user.
+   */
   def getUserName(id : String) : String = {
     val rs = statement.executeQuery(s"SELECT nameUser FROM user WHERE iduser = $id")
     if(rs.next()) {
@@ -36,6 +54,11 @@ class DatabaseManager(var url : String, var username : String, var password : St
         null
   }
 
+  /**
+   * getAcctBalance: Check the balance of the current account.
+   * @param id    Account id to consult.
+   * @return      Account balance.
+   */
   def getAcctBalance(id : String) : Float ={
     val rs = statement.executeQuery(s"SELECT balance FROM account WHERE idAcct = $id")
     if(rs.next()){
@@ -45,6 +68,10 @@ class DatabaseManager(var url : String, var username : String, var password : St
       0
   }
 
+  /**
+   * printAccountsSummary: Print the summary of user accounts.
+   * @param idUser         User id for the query.
+   */
   def printAccountsSummary(idUser: String): Unit = {
     val rs = statement.executeQuery(s"SELECT idAcct, nameA, balance FROM account where iduser = $idUser")
     while(rs.next()){
@@ -60,6 +87,10 @@ class DatabaseManager(var url : String, var username : String, var password : St
     }
   }
 
+  /**
+   * updateBalance: Adjusts an account balance based on recent transactions.
+   * @param idAcct  Account id to consult.
+   */
   def updateBalance(idAcct : String)  = {
     var balance : Float = 0
     val rs = statement.executeQuery(s"SELECT amount FROM transact WHERE idAcct = $idAcct")
@@ -73,6 +104,11 @@ class DatabaseManager(var url : String, var username : String, var password : St
     stmt.executeUpdate()
   }
 
+  /**
+   * numUserAccounts: Counts the number of accounts of a user.
+   * @param idUser    User id for the query.
+   * @return          Number of the user accounts.
+   */
   def numUserAccounts(idUser : String) : Int = {
     val rs = statement.executeQuery(s"SELECT COUNT(*) FROM account WHERE iduser = $idUser")
     if(rs.next())
@@ -81,6 +117,11 @@ class DatabaseManager(var url : String, var username : String, var password : St
       0
   }
 
+  /**
+   * validateAccount: Validates the existence of the account number entered by the user.
+   * @param id        Id of the account to validate.
+   * @return          True if data is correct, otherwise false.
+   */
   def validateAccount(id : String) : Boolean = {
     val rs = statement.executeQuery(s"SELECT nameA FROM account WHERE idAcct = $id")
     if(rs.next())
@@ -89,6 +130,10 @@ class DatabaseManager(var url : String, var username : String, var password : St
       false
   }
 
+  /**
+   * printAcctTransHistory: Print the transaction history of an account.
+   * @param id              Account id to consult.
+   */
   def printAcctTransHistory(id : String) = {
     val rs = statement.executeQuery(s"SELECT datet, amount, memo FROM transact WHERE idAcct = $id")
       while(rs.next()){
@@ -104,6 +149,12 @@ class DatabaseManager(var url : String, var username : String, var password : St
       }
   }
 
+  /**
+   * addAcctTransaction: Add a transaction to an account.
+   * @param idAcct       Id of the account to which the transaction will be added.
+   * @param amount       Transaction amount.
+   * @param memo         Identification message for the transaction.
+   */
   def addAcctTransaction(idAcct : String, amount : Float, memo : String) = {
     val date : Date = new Date()
     val dateStr : String = date.toString

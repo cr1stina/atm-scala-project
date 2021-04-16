@@ -3,9 +3,9 @@ import java.util.Scanner
 
 object ATM {
   /**
-   * depositFunds: make a deposit to an account.
-   * @param currentUser user with whom the deposit is made.
-   * @param sc          to read the data entered by the user.
+   * depositFunds: Make deposits to user accounts.
+   * @param sc      For data capture.
+   * @param db      For database queries.
    */
   def depositFunds(sc: Scanner, db : DatabaseManager) = {
     var amount : Float = 0
@@ -40,9 +40,9 @@ object ATM {
   }
 
   /**
-   * withdrawFunds: make a withdraw from an account.
-   * @param currentUser user with whom the withdraw is made.
-   * @param sc          to read the data entered by the user.
+   * withdrawFunds: Make withdrawals from user accounts.
+   * @param sc      For data capture.
+   * @param db      For database queries.
    */
   def withdrawFunds(sc : Scanner, db : DatabaseManager) = {
     var amount : Float = 0
@@ -83,9 +83,9 @@ object ATM {
   }
 
   /**
-   * transferFunds: make a transfer from an account.
-   * @param currentUser user with whom the transfer is made.
-   * @param sc          to read the data entered by the user.
+   * transferFunds: Make transfers between user accounts.
+   * @param sc      For data capture.
+   * @param db      For database queries.
    */
   def transferFunds(sc : Scanner, db : DatabaseManager) = {
     var fromAcct: String = ""
@@ -131,9 +131,9 @@ object ATM {
   }
 
   /**
-   * showTransHistory: prints the history of a selected account.
-   * @param currentUser user requesting the information.
-   * @param sc          to read the data entered by the user.
+   * showTransHistory:  Shows the transaction history of an account.
+   * @param sc      For data capture.
+   * @param db      For database queries.
    */
   def showTransHistory(sc: Scanner, db : DatabaseManager) = {
     var acc : String = ""
@@ -149,9 +149,10 @@ object ATM {
   }
 
   /**
-   * printUserMenu: prints the user menu
-   * @param currentUser current user
-   * @param sc          to read the data entered by the user.
+   * printUserMenu: Prints the options available to the user.
+   * @param idUser  For the identification of the user with whom the queries will be made.
+   * @param sc      For data capture.
+   * @param db      For database queries.
    */
   def printUserMenu(idUser: String, sc: Scanner, db: DatabaseManager) = {
     var opc : Int = 0
@@ -179,9 +180,9 @@ object ATM {
   }
 
   /**
-   * mainMenuPrompt: ATM main menu
-   * @param bank  current bank.
-   * @param sc    to read the data entered by the user.
+   * mainMenuPrompt: Print and capture data for log in.
+   * @param sc       For data capture.
+   * @param db       For database queries.
    */
   def mainMenuPrompt(sc: Scanner, db :DatabaseManager) = {
     var userId : String = ""
